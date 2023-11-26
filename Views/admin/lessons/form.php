@@ -1,11 +1,11 @@
 <div class="mb-3">
     <div class="form-group">
-        <strong class="form-lable">Tên bài tập:</strong>
-        <input type="text" name="name" class="form-control" placeholder="Nhập tên bài tập" value="<?php 
+        <strong class="form-lable">Tên bài giảng:</strong>
+        <input type="text" name="name" class="form-control" placeholder="Nhập tên bài giảng" value="<?php 
                 if(isset($_POST['name']) && trim($_POST['name']) != ""){
                     echo $_POST['name'];
                 }
-                if(isset($exerciseEdit)){echo $exerciseEdit['name'];}
+                if(isset($lessonEdit)){echo $lessonEdit['name'];}
             ?>">
     </div>
 </div>
@@ -18,25 +18,16 @@
             if(isset($_POST['described']) && trim($_POST['described']) != ""){
                 echo $_POST['described'];
             }
-            if(isset($exerciseEdit)){echo $exerciseEdit['described'];}
+            if(isset($lessonEdit)){echo $lessonEdit['described'];}
         ?>"
-        placeholder="Mô tả về bài tập">
+        placeholder="Mô tả về bài giảng">
     </div>
 </div> -->
 
 <div class="mb-3">
     <div class="row">
-        <div class="col-sm-3 form-group">
-            <strong class="form-lable">Độ khó</strong>
-            <select class="form-control" aria-label="Default select example" name="level" id="selected_level">
-                <option <?php echo (isset($_POST['level']) && $_POST['level'] == 1) ? "selected" : ""; ?> value="1">Dễ</option>
-                <option <?php echo (isset($_POST['level']) && $_POST['level'] == 2) ? "selected" : ""; ?> value="2">Trung bình</option>
-                <option <?php echo (isset($_POST['level']) && $_POST['level'] == 3) ? "selected" : ""; ?> value="3">Khó</option>
-            </select>
-        </div>
-
         <div class="col-sm-4 form-group">
-            <strong class="form-lable">Bài tập khóa học:</strong>
+            <strong class="form-lable">Bài giảng khóa học:</strong>
             <select name="courseId" id="selected_phanloai" aria-placeholder="Chọn chủ đề" class="form-control text-uppercase">
                 <?php
                     if(isset($courses)){
@@ -45,7 +36,7 @@
                             <option 
                             <?php
                                 if((isset($_POST['courseId']) && $_POST['courseId'] == $value['name']) 
-                                    || (isset($exerciseEdit['courseId']) && $exerciseEdit['courseId'] == $value['name'])){
+                                    || (isset($lessonEdit['courseId']) && $lessonEdit['courseId'] == $value['name'])){
                                     echo " selected ";
                                 }
                             ?>
@@ -57,16 +48,16 @@
 
         <div class="col-sm-4">
             <div class="form-group">
-                <strong class="form-label mb-0">Bài tập liên quan</strong>
+                <strong class="form-label mb-0">Bài giảng liên quan</strong>
                 <select name="relate" class="form-control text-uppercase">
                     <option value="null">--------</option>
                     <?php
                         foreach($courses as $val){
                             echo "<optgroup label='" . $val['name'] ."'>";
-                            foreach($exercises as $value){
+                            foreach($lessons as $value){
                                 if(($value['courseId'] != $val['name'])){ continue;}
                     ?>
-                                <option <?php if($exerciseEdit['id'] == $value['id']) echo "selected"; ?>  value="<?php echo $value['relate']; ?>"><?php echo $value['name']; ?></option>
+                                <option <?php if(isset($lessonEdit) && $lessonEdit['id'] == $value['id']) echo "selected"; ?>  value="<?php echo $value['relate']; ?>"><?php echo $value['name']; ?></option>
                     <?php   
                         }
                         echo "</optgroup>";

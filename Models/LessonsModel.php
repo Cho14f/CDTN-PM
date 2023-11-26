@@ -1,47 +1,27 @@
-
 <?php
-    class CoursesModel extends BaseModel
+    class LessonsModel extends BaseModel
     {
-        protected $table = "courses";
+        protected $table = "lessons";
 
         protected $colums = [
-            'id',
-            'name',
-            'described',
+            'id', 
+            'name', 
+            // 'described', 
+            'courseId', 
             'fileUpload',
-            'price',
-            'inputs',            // Yêu cầu kiến thức đầu vào của khóa học
-            'interact',             // Lượt tương tác
-            'relate',               //Liên quan  
-            'topicId',                  
-            'state',                 // Đã hoàn thiện hay chưa
-            'tags',
+            'relate',
             'created_at',
         ];
-
-        public $checkError = null;
 
         // Upload File
         // protected $fileUpload = isset($_FILES['fileUpload']) ? $_FILES['fileUpload'] : [];
         protected $tagFileInput = 'fileUpload';            //images file
-        protected $target_dir = "./uploads/images/";      //đường dẫn thư mục lưu file ảnh upload
+        protected $target_dir = "./uploads/files/lessons/";      //đường dẫn thư mục lưu file ảnh upload
 
-        protected $fileType = ['jpg', 'png', 'git', 'webp'];       //chọn đuôi file upload
+        protected $fileType = ['pdf', 'mp4'];       //chọn đuôi file upload
+
 
         function create(){
-            $totalTag = $_POST['totalTag'];
-            $tags = "";
-            unset($_POST['totalTag']);
-
-            for($i = 1; $i <= $totalTag; $i++){
-                if(isset($_POST['tag'.$i])){
-                    // print_r($_POST['tags']);
-                    $tags .= $_POST['tag'.$i] . ' ';
-                    unset($_POST['tag'.$i]);
-                }    
-            }
-            $_POST['tags'] = $tags;
-
             // relate
             if(isset($_POST['relate'])){
                 $_POST['relate'] = $this->setRelete();
@@ -66,27 +46,12 @@
             }
         }
 
-        
         public function update(){
-            // Tags
-            $totalTag = $_POST['totalTag'];
-            $tags = "";
-            unset($_POST['totalTag']);
-
-            for($i = 1; $i <= $totalTag; $i++){
-                if(isset($_POST['tag'.$i])){
-                    // print_r($_POST['tags']);
-                    $tags .= $_POST['tag'.$i] . ' ';
-                    unset($_POST['tag'.$i]);
-                }    
-            }
-            $_POST['tags'] = $tags;
-
             if(isset($_POST['id'])){  
                 $editId = $_POST['id'];
             }
 
-            //relate
+            // relate
             if(isset($_POST['relate'])){
                 $_POST['relate'] = $this->setRelete();
             }
@@ -116,7 +81,6 @@
                 SET $set
                 WHERE id = $editId; 
                 ";
-
             if(empty($this->checkError)){
                 $this->_query($sql);
             }
@@ -145,16 +109,4 @@
             
             return $fileName;
         }
-
-        // public function setRelete(){
-        //     $lastCourse = $this->lastRow($this->table, 'relate');
-        //     if($_POST['relate'] == "null" || $_POST['relate'] == $lastCourse['relate']){
-        //         $relate = $lastCourse['id'] + 1;
-        //     }else{
-        //         $where[] = "relate >= " . $_POST['relate'];
-        //         $data = $this->all($this->table, ['relate'], $where, 0, 2, ['relate' => 'asc']);
-        //         $relate =  ($data[0]['relate'] + $data[1]['relate']) / 2.0;
-        //     };
-        //     return $relate;
-        // }
     }
